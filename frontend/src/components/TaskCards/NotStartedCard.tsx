@@ -13,7 +13,7 @@ function NotStartedCard({
   timeEstimate: string;
 }) {
   return (
-    <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-blue-600 transition-colors group w-full min-w-[350px]">
+    <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-blue-600 transition-colors group  max-w-[350px]">
       {/* Header Section */}
       <div className="flex justify-between items-start mb-4 gap-2 ">
         <h3 className="text-base font-bold text-white">{title}</h3>
