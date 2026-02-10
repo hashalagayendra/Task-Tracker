@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+/* Define custom color variables */
+:root {
+  --bg-color: #0d0d0f; /* Main app background (Very Dark) */
+  --sidebar-bg: #121214; /* Sidebar background */
+  --card-bg: #18181b; /* Cards & Widgets background */
+
+  --border-color: #27272a; /* Subtle borders / dividers */
+
+  --text-primary: #ffffff; /* Headings & Main text (White) */
+  --text-secondary: #a1a1aa; /* Subtitles & labels (Light Gray) */
+
+  --accent-blue: #0066ff; /* Primary Brand Color (Buttons, Highlights) */
+  --accent-green: #22c55e; /* Success / Completed states */
+  --accent-lime: #a3e635; /* Running Task active state */
+  --accent-orange: #ff5500; /* High Priority / Warnings */
+  --accent-yellow: #facc15; /* Paused Task / Attention */
+}
