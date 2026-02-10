@@ -5,22 +5,21 @@ import UserIcon from "./UserIcon";
 function DashboardHeadder({
   title = "Dash Board",
   subtitle = "Stay Organized, Complete Tasks, Achieve Goals",
-  user = {
-    name: "Hsala gayendra",
-    handle: "@hslagayendra9987",
-    initial: "H",
-  },
 }: {
   title?: string;
   subtitle?: string;
-  user?: { name: string; handle: string; initial: string };
 }) {
   return (
-    <header className="flex flex-col md:flex-row justify-between items-start md:items-start gap-4 mb-8 w-full">
+    <header className="flex flex-col lg:flex-row justify-between items-start md:items-start gap-4 mb-8 w-full">
       {/* Left Side: Title & Subtitle */}
-      <div>
-        <h1 className="text-3xl font-bold text-white mb-1.5">{title}</h1>
-        <p className="text-sm text-zinc-400">{subtitle}</p>
+      <div className="flex items-center justify-between  w-full">
+        <div className=" ">
+          <h1 className="text-3xl font-bold text-white mb-1.5">{title}</h1>
+          <p className="text-sm text-zinc-400">{subtitle}</p>
+        </div>
+        <div className="lg:hidden self-start">
+          <UserIcon />
+        </div>
       </div>
 
       {/* Right Side: Search & User Profile */}
@@ -29,7 +28,10 @@ function DashboardHeadder({
 
         <SearchBox />
         {/* User Profile */}
-        <UserIcon />
+        <div className="max-lg:hidden">
+          {" "}
+          <UserIcon />
+        </div>
       </div>
     </header>
   );

@@ -4,7 +4,7 @@ import DashboardHeadder from "../components/DashboardHeadder";
 function Dashboard() {
   return (
     <div className="bg-(--bg-color) flex">
-      <div className="w-1/6 h-screen sticky top-0">
+      <div className="w-72 h-screen sticky top-0">
         <Sidebar />
       </div>
 
