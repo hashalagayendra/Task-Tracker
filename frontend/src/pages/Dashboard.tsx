@@ -2,7 +2,7 @@ import Sidebar from "../components/Sidebar";
 
 function Dashboard() {
   return (
-    <div className="bg-red-800">
+    <div className="bg-(--bg-color)">
       <Sidebar />
     </div>
   );
