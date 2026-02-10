@@ -12,7 +12,7 @@ function Main() {
       </div>
 
       {/* main body  */}
-      <div className=" flex-1 px-10 py-8">
+      <div className=" flex-1  py-8">
         <Dashboard></Dashboard>
         <TaskList></TaskList>
       </div>

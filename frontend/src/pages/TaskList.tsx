@@ -6,6 +6,7 @@ import DashboardCardContainer from "../components/DashboardCardContainer";
 import TaskPageHeadder from "../components/TaskPageHeadder";
 import { Search } from "lucide-react";
 import SearchBox from "../components/SearchBox";
+import TaskPageCardContainer from "../components/TaskPageCardContainer";
 
 function TaskList() {
   return (
@@ -26,7 +27,7 @@ function TaskList() {
         </button>
       </div>
 
-      <DashboardCardContainer />
+      <TaskPageCardContainer />
     </div>
   );
 }
