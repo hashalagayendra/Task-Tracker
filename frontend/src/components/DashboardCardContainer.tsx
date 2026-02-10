@@ -1,6 +1,7 @@
 import React from "react";
 import NotStartedCard from "./TaskCards/NotStartedCard";
 import RunningCard from "./TaskCards/RunningCard";
+import PausedCard from "./TaskCards/PausedCard";
 function DashboardCardContainer() {
   return (
     <div className="mt-10">
@@ -19,6 +20,13 @@ function DashboardCardContainer() {
           priority="High Piority"
           timeEstimate="30 Min"
         ></RunningCard>
+
+        <PausedCard
+          title="Create Home screen ERP Website"
+          date="September 28, 2093"
+          priority="High Piority"
+          timeEstimate="30 Min"
+        ></PausedCard>
       </div>
     </div>
   );
