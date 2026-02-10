@@ -5,7 +5,7 @@ function Sidebar() {
   type SidebarItems = "Dashboard" | "Task" | "Analyzing";
   const [active, setActive] = useState<SidebarItems>("Dashboard");
   return (
-    <div className="w-full max-w-64 h-screen bg-(--sidebar-bg) flex flex-col border-r border-(--accent-blue) ">
+    <div className="w-full  h-screen bg-(--sidebar-bg) flex flex-col border-r border-(--accent-blue) ">
       <div className="w-full h-20 pt-5">
         <div className="flex   justify-center gap-5 px-5">
           <div className=" w-30 h-16 rounded-md bg-blue-600">f</div>

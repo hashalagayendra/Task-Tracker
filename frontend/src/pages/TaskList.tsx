@@ -1,9 +1,10 @@
+import React from "react";
 import Sidebar from "../components/Sidebar";
-import DashboardHeadder from "../components/DashboardHeadder";
 import StatCard from "../components/StatCard";
+import DashboardHeadder from "../components/DashboardHeadder";
 import DashboardCardContainer from "../components/DashboardCardContainer";
 
-function Dashboard() {
+function TaskList() {
   return (
     <div className=" flex-1 px-10 py-8">
       <DashboardHeadder />
@@ -18,4 +19,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default TaskList;

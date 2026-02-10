@@ -15,7 +15,7 @@ function RunningCard({
     <div className="p-6 bg-zinc-900 border border-lime-400/50 border-t-2 border-t-lime-400 rounded-xl group max-w-[350px]">
       {/* Status Header */}
       <div className="flex  gap-2 mb-4 justify-between items-start">
-        <span className="text-sm font-bold text-yellow-500">
+        <span className="text-sm font-bold text-lime-500">
           Task is Running ...
         </span>
         <div className="text-zinc-400 cursor-pointer">
