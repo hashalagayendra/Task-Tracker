@@ -56,6 +56,27 @@ export class UserService {
     };
   }
 
+  async validateToken(token: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('JWT_SECRET') || 'secretKey',
+      });
+      const user = await this.prismaService.user.findUnique({
+        where: { id: payload.sub },
+      });
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
+
   async displayConfugrefiles() {
     return this.configService.get<string>('PORT');
   }

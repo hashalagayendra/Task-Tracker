@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -22,19 +22,31 @@ function Signup() {
 
   async function registerUser() {
     try {
-      return await axios.post("/api/auth/register", formData);
-    } catch (e) {
+      return await axios.post("/user", formData);
+    } catch (e: any) {
       console.log(e);
+      throw e.response?.data?.message || "Registration failed";
     }
   }
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.promise(registerUser(), {
-      loading: "Creating account...",
-      success: <b>Account created successfully!</b>,
-      error: <b>Could not create account.</b>,
-    });
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    toast.promise(
+      registerUser().then(() => {
+        setTimeout(() => navigate("/login"), 1000);
+      }),
+      {
+        loading: "Creating account...",
+        success: <b>Account created successfully!</b>,
+        error: (err) => <b>{err.toString()}</b>,
+      },
+    );
   };
 
   return (

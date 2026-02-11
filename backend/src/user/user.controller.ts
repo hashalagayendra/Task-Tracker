@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Res,
+  Req,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserService } from './user.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @ApiTags('user')
 @Controller('user')
@@ -37,6 +45,17 @@ export class UserController {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
     return { message: 'Login successful', user };
+  }
+
+  @Get('validate')
+  @ApiOperation({ summary: 'Validate user token' })
+  @ApiResponse({ status: 200, description: 'Token is valid' })
+  async validate(@Req() req: Request) {
+    const token = req.cookies['Authentication'];
+    if (!token) {
+      throw new UnauthorizedException('No token found');
+    }
+    return this.userService.validateToken(token);
   }
 
   @Get('config-test')
