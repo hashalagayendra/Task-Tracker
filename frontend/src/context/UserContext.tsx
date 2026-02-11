@@ -41,6 +41,8 @@ interface UserContextType {
   startTask: (id: string) => Promise<void>;
   pauseTask: (id: string) => Promise<void>;
   completeTask: (id: string, timeToSpend: number) => Promise<void>;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -52,6 +54,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     useState<SectionType>("DashBoard");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [tasksLoading, setTasksLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const setUser = (user: User) => {
     setUserState(user);
@@ -173,6 +176,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
         startTask,
         pauseTask,
         completeTask,
+        searchQuery,
+        setSearchQuery,
       }}
     >
       {children}

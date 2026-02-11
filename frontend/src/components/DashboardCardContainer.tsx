@@ -11,14 +11,22 @@ function DashboardCardContainer() {
     startTask,
     pauseTask,
     completeTask,
+    searchQuery,
   } = useUser();
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // Sort tasks by updatedAt in descending order to get the most recent ones
-  const recentTasks = [...tasks]
+  // Filter tasks based on searchQuery and Sort tasks by updatedAt in descending order to get the most recent ones
+  const recentTasks = tasks
+    .filter((task) => {
+      const query = searchQuery.toLowerCase();
+      return (
+        task.title?.toLowerCase().includes(query) ||
+        task.description?.toLowerCase().includes(query)
+      );
+    })
     .sort(
       (a, b) =>
         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),

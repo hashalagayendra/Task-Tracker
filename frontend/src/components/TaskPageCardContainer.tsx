@@ -11,11 +11,20 @@ function TaskPageCardContainer() {
     startTask,
     pauseTask,
     completeTask,
+    searchQuery,
   } = useUser();
 
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  const filteredTasks = tasks.filter((task) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      task.title?.toLowerCase().includes(query) ||
+      task.description?.toLowerCase().includes(query)
+    );
+  });
 
   const handleUpdate = (id: string) => {
     // TODO: Open update modal
@@ -28,13 +37,15 @@ function TaskPageCardContainer() {
       <div className="bg-gradient-to-r from-green-400/5 to-(--bg-color) px-7 pt-5 pb-10 rounded-xl border border-green-500/20">
         {tasksLoading ? (
           <p className="text-zinc-400 text-center py-10">Loading tasks...</p>
-        ) : tasks.length === 0 ? (
+        ) : filteredTasks.length === 0 ? (
           <p className="text-zinc-400 text-center py-10">
-            No tasks yet. Create one to get started!
+            {searchQuery
+              ? `No tasks matching "${searchQuery}"`
+              : "No tasks yet. Create one to get started!"}
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
               <MainTaskCard
                 key={task.id}
                 task={task}
