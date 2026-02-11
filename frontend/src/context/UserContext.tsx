@@ -18,6 +18,8 @@ export interface Task {
   startTime?: string;
   endTime?: string;
   createdAt: string;
+  totalElapsedSeconds?: number;
+  activeTrackerStartTime?: string;
 }
 
 // Define the specific allowed values for currentSection
@@ -34,6 +36,7 @@ interface UserContextType {
   fetchTasks: () => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
   addTask: (task: Task) => void;
+  startTask: (id: string) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -82,6 +85,29 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setTasks((prev) => [...prev, task]);
   };
 
+  const startTask = async (id: string) => {
+    try {
+      const res = await axios.post(`/task/${id}/start`);
+      const { task, totalElapsedSeconds, activeTracker } = res.data;
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === id
+            ? {
+                ...t,
+                ...task,
+                totalElapsedSeconds,
+                activeTrackerStartTime: activeTracker.startTime,
+              }
+            : t,
+        ),
+      );
+      toast.success("Task started!");
+    } catch (error) {
+      console.error("Error starting task:", error);
+      toast.error("Failed to start task");
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -95,6 +121,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         fetchTasks,
         deleteTask,
         addTask,
+        startTask,
       }}
     >
       {children}

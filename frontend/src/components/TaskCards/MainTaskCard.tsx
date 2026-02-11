@@ -1,26 +1,21 @@
 import NotStartedCard from "./NotStartedCard";
 import PausedCard from "./PausedCard";
 import RunningCard from "./RunningCard";
-
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  status: "notStarted" | "running" | "pause" | "done";
-  priority: "high" | "medium" | "low";
-  estimatedTime: number;
-  startTime?: string;
-  endTime?: string;
-  createdAt: string;
-}
+import type { Task } from "../../context/UserContext";
 
 interface MainTaskCardProps {
   task: Task;
   onDelete?: (id: string) => void;
   onUpdate?: (id: string) => void;
+  onStart?: (id: string) => void;
 }
 
-function MainTaskCard({ task, onDelete, onUpdate }: MainTaskCardProps) {
+function MainTaskCard({
+  task,
+  onDelete,
+  onUpdate,
+  onStart,
+}: MainTaskCardProps) {
   const priorityLabel =
     task.priority === "high"
       ? "High Piority"
@@ -44,6 +39,9 @@ function MainTaskCard({ task, onDelete, onUpdate }: MainTaskCardProps) {
           date={date}
           priority={priorityLabel}
           timeEstimate={timeEstimate}
+          estimatedTimeSeconds={task.estimatedTime}
+          totalElapsedSeconds={task.totalElapsedSeconds || 0}
+          activeTrackerStartTime={task.activeTrackerStartTime}
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
         />
@@ -70,6 +68,7 @@ function MainTaskCard({ task, onDelete, onUpdate }: MainTaskCardProps) {
           timeEstimate={timeEstimate}
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
+          onStart={() => onStart?.(task.id)}
         />
       );
   }

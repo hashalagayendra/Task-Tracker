@@ -8,6 +8,7 @@ function NotStartedCard({
   timeEstimate,
   onDelete,
   onUpdate,
+  onStart,
 }: {
   title: string;
   date: string;
@@ -15,6 +16,7 @@ function NotStartedCard({
   timeEstimate: string;
   onDelete?: () => void;
   onUpdate?: () => void;
+  onStart?: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -102,7 +104,7 @@ function NotStartedCard({
           <span className="text-base text-white">Estimated Time</span>
           <div className="flex -mt-1 items-baseline gap-1">
             <span className="text-6xl font-bold text-white">
-              {timeEstimate.split(" ")[0]}
+              {Math.floor(Number(timeEstimate.split(" ")[0]) / 60)}
             </span>
             <span className="text-lg font-bold text-white">Min</span>
           </div>
@@ -111,7 +113,10 @@ function NotStartedCard({
 
       {/* Action Button */}
       <div className="flex justify-center">
-        <button className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors shadow-lg shadow-blue-900/20 group-hover:shadow-blue-600/20 w-full justify-center">
+        <button
+          onClick={() => onStart?.()}
+          className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors shadow-lg shadow-blue-900/20 group-hover:shadow-blue-600/20 w-full justify-center cursor-pointer"
+        >
           <PlayIcon />
           Start
         </button>

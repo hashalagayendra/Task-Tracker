@@ -57,6 +57,7 @@ model TaskTracker{
   id String @id @default(uuid())
   taskId String
   startTime DateTime
-  endTime DateTime
+  pauseTime DateTime?
+  timeDeference Int?
   task Task @relation(fields: [taskId], references: [id])
 }

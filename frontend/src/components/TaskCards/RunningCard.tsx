@@ -6,6 +6,9 @@ function RunningCard({
   date,
   priority,
   timeEstimate,
+  estimatedTimeSeconds,
+  totalElapsedSeconds,
+  activeTrackerStartTime,
   onDelete,
   onUpdate,
 }: {
@@ -13,12 +16,17 @@ function RunningCard({
   date: string;
   priority: string;
   timeEstimate: string;
+  estimatedTimeSeconds: number;
+  totalElapsedSeconds: number;
+  activeTrackerStartTime?: string;
   onDelete?: () => void;
   onUpdate?: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
 
+  // Click outside to close menu
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -28,6 +36,40 @@ function RunningCard({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Live countdown timer
+  useEffect(() => {
+    const calcRemaining = () => {
+      const liveElapsed = activeTrackerStartTime
+        ? Math.floor(
+            (Date.now() - new Date(activeTrackerStartTime).getTime()) / 1000,
+          )
+        : 0;
+      const remaining =
+        estimatedTimeSeconds - totalElapsedSeconds - liveElapsed;
+      setRemainingSeconds(Math.max(0, remaining));
+    };
+
+    calcRemaining();
+    const interval = setInterval(calcRemaining, 1000);
+    return () => clearInterval(interval);
+  }, [estimatedTimeSeconds, totalElapsedSeconds, activeTrackerStartTime]);
+
+  const displayMinutes = Math.floor(remainingSeconds / 60);
+  const displaySeconds = remainingSeconds % 60;
+
+  // Progress calculation
+  const totalUsed = estimatedTimeSeconds - remainingSeconds;
+  const progressPercent =
+    estimatedTimeSeconds > 0
+      ? Math.min(100, Math.round((totalUsed / estimatedTimeSeconds) * 100))
+      : 0;
+
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  };
 
   return (
     <div className="p-6 bg-zinc-900 border border-lime-400/50 border-t-2 border-t-lime-400 rounded-xl group max-w-[350px]">
@@ -102,15 +144,19 @@ function RunningCard({
           </span>
         </div>
 
-        {/* Right Side: Time Remaining */}
+        {/* Right Side: Time Remaining - LIVE */}
         <div className="text-right">
           <span className="text-xs text-zinc-400 tracking-wider">
             TIME REMAINING
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="text-5xl font-bold text-white">18</span>
+            <span className="text-5xl font-bold text-white">
+              {displayMinutes}
+            </span>
             <span className="text-lg font-semibold text-zinc-400">m</span>
-            <span className="text-5xl font-bold text-white">30</span>
+            <span className="text-5xl font-bold text-white">
+              {String(displaySeconds).padStart(2, "0")}
+            </span>
             <span className="text-lg font-semibold text-zinc-400">s</span>
           </div>
         </div>
@@ -120,15 +166,17 @@ function RunningCard({
       <div className="mb-6">
         <div className="flex justify-between items-center text-xs text-zinc-400 mb-1">
           <span>00:00</span>
-          <span>00:20</span>
+          <span>{formatTime(estimatedTimeSeconds)}</span>
         </div>
         <div className="w-full bg-zinc-700 rounded-full h-2">
           <div
-            className="bg-lime-400 h-2 rounded-full"
-            style={{ width: "80%" }}
+            className="bg-lime-400 h-2 rounded-full transition-all duration-1000"
+            style={{ width: `${progressPercent}%` }}
           ></div>
         </div>
-        <div className="text-right text-sm font-bold text-white mt-1">80%</div>
+        <div className="text-right text-sm font-bold text-white mt-1">
+          {progressPercent}%
+        </div>
       </div>
 
       {/* Action Buttons */}

@@ -46,4 +46,9 @@ export class TaskController {
   remove(@Param('id') id: string) {
     return this.taskService.remove(id);
   }
+
+  @Post(':id/start')
+  startTask(@Param('id') id: string) {
+    return this.taskService.startTask(id);
+  }
 }

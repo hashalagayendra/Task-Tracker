@@ -40,4 +40,35 @@ export class TaskService {
   remove(id: string) {
     return this.prisma.task.delete({ where: { id } });
   }
+
+  async startTask(taskId: string) {
+    // 1. Update task status to running
+    const task = await this.prisma.task.update({
+      where: { id: taskId },
+      data: { status: 'running' },
+    });
+
+    // 2. Create a new TaskTracker row with startTime = now
+    const activeTracker = await this.prisma.taskTracker.create({
+      data: {
+        taskId,
+        startTime: new Date(),
+      },
+    });
+
+    // 3. Get all previous tracker rows and sum timeDeference
+    const allTrackers = await this.prisma.taskTracker.findMany({
+      where: { taskId },
+    });
+
+    const totalElapsedSeconds = allTrackers.reduce((sum, tracker) => {
+      return sum + (tracker.timeDeference || 0);
+    }, 0);
+
+    return {
+      task,
+      totalElapsedSeconds,
+      activeTracker,
+    };
+  }
 }
