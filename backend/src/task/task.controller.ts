@@ -32,6 +32,11 @@ export class TaskController {
     return this.taskService.findAll();
   }
 
+  @Get('recent')
+  findRecent() {
+    return this.taskService.findRecent();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.taskService.findOne(id);

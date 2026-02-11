@@ -19,6 +19,7 @@ export interface Task {
   startTime?: string;
   endTime?: string;
   createdAt: string;
+  updatedAt: string;
   totalElapsedSeconds?: number;
   activeTrackerStartTime?: string;
 }

@@ -34,7 +34,7 @@ function MainTaskCard({
     year: "numeric",
   });
 
-  const timeEstimate = `${task.estimatedTime} Min`;
+  const timeEstimate = `${Math.floor(task.estimatedTime / 60)} Min`;
 
   switch (task.status) {
     case "running":
@@ -44,7 +44,7 @@ function MainTaskCard({
           date={date}
           priority={priorityLabel}
           timeEstimate={timeEstimate}
-          estimatedTimeSeconds={task.estimatedTime * 60}
+          estimatedTimeSeconds={task.estimatedTime}
           totalElapsedSeconds={task.totalElapsedSeconds || 0}
           activeTrackerStartTime={task.activeTrackerStartTime}
           onDelete={() => onDelete?.(task.id)}
@@ -60,7 +60,7 @@ function MainTaskCard({
           date={date}
           priority={priorityLabel}
           timeEstimate={timeEstimate}
-          estimatedTimeSeconds={task.estimatedTime * 60}
+          estimatedTimeSeconds={task.estimatedTime}
           totalElapsedSeconds={task.totalElapsedSeconds || 0}
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
@@ -76,7 +76,7 @@ function MainTaskCard({
           date={date}
           priority={priorityLabel}
           timeToSpend={task.timeToSpend || 0}
-          estimatedTimeSeconds={task.estimatedTime * 60}
+          estimatedTimeSeconds={task.estimatedTime}
           totalUsedSeconds={task.totalElapsedSeconds || 0}
           onDelete={() => onDelete?.(task.id)}
         />

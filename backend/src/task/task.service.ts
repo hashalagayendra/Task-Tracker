@@ -27,24 +27,36 @@ export class TaskService {
       include: { taskTrackers: true },
     });
 
-    return tasks.map((task) => {
-      const totalElapsedSeconds = task.taskTrackers.reduce(
-        (sum, tracker) => sum + (tracker.timeDeference || 0),
-        0,
-      );
+    return tasks.map((task) => this.formatTaskWithMetrics(task));
+  }
 
-      // Find the active tracker (has startTime but no pauseTime)
-      const activeTracker = task.taskTrackers.find(
-        (t) => t.startTime && !t.pauseTime,
-      );
-
-      const { taskTrackers, ...taskData } = task;
-      return {
-        ...taskData,
-        totalElapsedSeconds,
-        activeTrackerStartTime: activeTracker?.startTime || null,
-      };
+  async findRecent() {
+    const tasks = await this.prisma.task.findMany({
+      include: { taskTrackers: true },
+      orderBy: { updatedAt: 'desc' },
+      take: 3,
     });
+
+    return tasks.map((task) => this.formatTaskWithMetrics(task));
+  }
+
+  private formatTaskWithMetrics(task: any) {
+    const totalElapsedSeconds = task.taskTrackers.reduce(
+      (sum, tracker) => sum + (tracker.timeDeference || 0),
+      0,
+    );
+
+    // Find the active tracker (has startTime but no pauseTime)
+    const activeTracker = task.taskTrackers.find(
+      (t) => t.startTime && !t.pauseTime,
+    );
+
+    const { taskTrackers, ...taskData } = task;
+    return {
+      ...taskData,
+      totalElapsedSeconds,
+      activeTrackerStartTime: activeTracker?.startTime || null,
+    };
   }
 
   findOne(id: string) {
