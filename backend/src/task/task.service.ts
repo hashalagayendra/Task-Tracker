@@ -138,4 +138,49 @@ export class TaskService {
       totalElapsedSeconds,
     };
   }
+
+  async completeTask(taskId: string, timeToSpend: number) {
+    // 1. If currently running, close the active tracker first
+    const activeTracker = await this.prisma.taskTracker.findFirst({
+      where: { taskId, pauseTime: null },
+      orderBy: { startTime: 'desc' },
+    });
+
+    if (activeTracker) {
+      const now = new Date();
+      const timeDiff = Math.floor(
+        (now.getTime() - new Date(activeTracker.startTime).getTime()) / 1000,
+      );
+      await this.prisma.taskTracker.update({
+        where: { id: activeTracker.id },
+        data: {
+          pauseTime: now,
+          timeDeference: timeDiff,
+        },
+      });
+    }
+
+    // 2. Update task status to done and store timeToSpend provided by frontend
+    const task = await this.prisma.task.update({
+      where: { id: taskId },
+      data: {
+        status: 'done',
+        timeToSpend,
+      },
+    });
+
+    // 3. Sum all timeDeference from all tracker rows for returning updated state
+    const allTrackers = await this.prisma.taskTracker.findMany({
+      where: { taskId },
+    });
+    const totalElapsedSeconds = allTrackers.reduce((sum, tracker) => {
+      return sum + (tracker.timeDeference || 0);
+    }, 0);
+
+    return {
+      task,
+      totalElapsedSeconds,
+      timeToSpend,
+    };
+  }
 }

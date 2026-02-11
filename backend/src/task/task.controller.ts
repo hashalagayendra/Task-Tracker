@@ -56,4 +56,12 @@ export class TaskController {
   pauseTask(@Param('id') id: string) {
     return this.taskService.pauseTask(id);
   }
+
+  @Post(':id/done')
+  completeTask(
+    @Param('id') id: string,
+    @Body('timeToSpend') timeToSpend: number,
+  ) {
+    return this.taskService.completeTask(id, timeToSpend);
+  }
 }

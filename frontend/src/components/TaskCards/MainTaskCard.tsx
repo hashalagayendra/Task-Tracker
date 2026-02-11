@@ -9,6 +9,7 @@ interface MainTaskCardProps {
   onUpdate?: (id: string) => void;
   onStart?: (id: string) => void;
   onPause?: (id: string) => void;
+  onComplete?: (id: string, timeToSpend: number) => void;
 }
 
 function MainTaskCard({
@@ -17,6 +18,7 @@ function MainTaskCard({
   onUpdate,
   onStart,
   onPause,
+  onComplete,
 }: MainTaskCardProps) {
   const priorityLabel =
     task.priority === "high"
@@ -47,6 +49,7 @@ function MainTaskCard({
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
           onPause={() => onPause?.(task.id)}
+          onComplete={(timeToSpend) => onComplete?.(task.id, timeToSpend)}
         />
       );
     case "pause":
@@ -61,6 +64,7 @@ function MainTaskCard({
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
           onResume={() => onStart?.(task.id)}
+          onComplete={(timeToSpend) => onComplete?.(task.id, timeToSpend)}
         />
       );
     case "notStarted":

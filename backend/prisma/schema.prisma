@@ -46,6 +46,7 @@ model Task {
   startTime DateTime?
   endTime DateTime?
   estimatedTime Int
+  timeToSpend Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId String

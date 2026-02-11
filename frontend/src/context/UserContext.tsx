@@ -38,6 +38,7 @@ interface UserContextType {
   addTask: (task: Task) => void;
   startTask: (id: string) => Promise<void>;
   pauseTask: (id: string) => Promise<void>;
+  completeTask: (id: string, timeToSpend: number) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -132,6 +133,28 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const completeTask = async (id: string, timeToSpend: number) => {
+    try {
+      const res = await axios.post(`/task/${id}/done`, { timeToSpend });
+      const { task } = res.data;
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === id
+            ? {
+                ...t,
+                ...task,
+                activeTrackerStartTime: undefined,
+              }
+            : t,
+        ),
+      );
+      toast.success("Task completed!");
+    } catch (error) {
+      console.error("Error completing task:", error);
+      toast.error("Failed to complete task");
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -147,6 +170,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         addTask,
         startTask,
         pauseTask,
+        completeTask,
       }}
     >
       {children}

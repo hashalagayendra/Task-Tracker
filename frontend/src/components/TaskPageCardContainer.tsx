@@ -3,8 +3,15 @@ import { useUser } from "../context/UserContext";
 import MainTaskCard from "./TaskCards/MainTaskCard";
 
 function TaskPageCardContainer() {
-  const { tasks, tasksLoading, fetchTasks, deleteTask, startTask, pauseTask } =
-    useUser();
+  const {
+    tasks,
+    tasksLoading,
+    fetchTasks,
+    deleteTask,
+    startTask,
+    pauseTask,
+    completeTask,
+  } = useUser();
 
   useEffect(() => {
     fetchTasks();
@@ -35,6 +42,7 @@ function TaskPageCardContainer() {
                 onUpdate={handleUpdate}
                 onStart={startTask}
                 onPause={pauseTask}
+                onComplete={completeTask}
               />
             ))}
           </div>
