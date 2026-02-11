@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Hexagon } from "lucide-react";
 
 function Sidebar() {
   const { currentSection, setCurrentSection, clearUser } = useUser();
@@ -26,7 +27,9 @@ function Sidebar() {
     <div className="w-full  h-screen bg-(--sidebar-bg) flex flex-col  ">
       <div className="w-full h-20 pt-5">
         <div className="flex   justify-center gap-5 px-5">
-          <div className=" w-30 h-16 rounded-md bg-blue-600">f</div>
+          <div className="w-16 h-16 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-900/20">
+            <Hexagon className="text-white w-10 h-10" fill="currentColor" />
+          </div>
           <div className="flex flex-col ">
             <div className="text-white font-semibold text-xl ">Task Master</div>
             <div className="text-white/60 text-[10px]  pr-4">

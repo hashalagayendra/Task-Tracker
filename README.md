@@ -1,6 +1,6 @@
 # Task Master
 
-Task Master is a modern productivity and task tracking application designed to help you streamline your workflow, manage tasks efficiently, and gain insights into your productivity habits.
+Task Master is a modern productivity and task tracking application designed to help you streamline your workflow, manage tasks efficiently, and gain insights into your productivity habits. It features a robust backend API serving a dynamic, responsive frontend with real-time updates and interactive data visualization.
 
 ## 🚀 Features
 
@@ -11,32 +11,41 @@ Task Master is a modern productivity and task tracking application designed to h
 - **Authentication**: Secure user signup and login functionality.
 - **Responsive Design**: A premium, dark-themed UI that works seamlessly across devices.
 
-## 🛠️ Tech Stack
+## 🛠️ Technologies Used
 
 ### Frontend
 
-- **Framework**: React (Vite)
-- **Language**: TypeScript
-- **Styling**: TailwindCSS
-- **State Management**: Context API
-- **Routing**: React Router
-- **Charts**: Recharts
+- **Framework**: React `v19.2.0`
+- **Build Tool**: Vite `v7.3.1`
+- **Styling**: TailwindCSS `v4.1.18`, Lucide React (Icons)
+- **State Management**: React Context API
+- **Routing**: React Router DOM `v7.13.0`
+- **Charts**: Recharts `v3.7.0`
 - **HTTP Client**: Axios
 
 ### Backend
 
-- **Framework**: NestJS
+- **Framework**: NestJS `v11.0.1`
 - **Language**: TypeScript
-- **Database**: PostgreSQL
-- **ORM**: Prisma
-- **Authentication**: JWT (JSON Web Tokens)
+- **Database**: PostgreSQL `v16+`
+- **ORM**: Prisma `v7.3.0`
+- **Authentication**: JWT (JSON Web Tokens), Passport, Bcrypt
+- **API Documentation**: Swagger (via NestJS)
 
-## ⚙️ Prerequisites
+## ⚙️ Environment Variables
 
-Before you begin, ensure you have multiple terminals ready and the following installed:
+Create a `.env` file in the `backend` directory with the following variables:
 
-- [Node.js](https://nodejs.org/) (v16 or higher)
-- [PostgreSQL](https://www.postgresql.org/)
+```env
+# Database Connection
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
+
+# Authentication
+JWT_SECRET="your-super-secret-key-change-this"
+
+# Optional
+NODE_ENV="development" # Set to 'production' for secure cookies
+```
 
 ## 📦 Installation & Setup
 
@@ -56,17 +65,14 @@ cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` directory and configure your database connection:
-
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
-JWT_SECRET="your-secret-key"
-```
-
-Run database migrations:
+Configure your `.env` file as shown above. Then, run database migrations and generate the Prisma client:
 
 ```bash
-npx prisma migrate dev
+# Generate Prisma Client (Important!)
+npx prisma generate
+
+# Run Migrations
+npx prisma migrate dev --name init
 ```
 
 Start the backend server:
@@ -75,14 +81,14 @@ Start the backend server:
 npm run start:dev
 ```
 
-The backend will start on `http://localhost:3000`.
+The backend API will be available at `http://localhost:3000`.
 
 ### 3. Frontend Setup
 
-Open a new terminal navigate to the frontend directory and install dependencies:
+Open a new terminal, navigate to the frontend directory, and install dependencies:
 
 ```bash
-cd frontend
+cd ../frontend
 npm install
 ```
 
@@ -94,10 +100,35 @@ npm run dev
 
 The application will be accessible at `http://localhost:5173`.
 
-## 🤝 Contributing
+## 🗄️ Database Setup
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Ensure **PostgreSQL** is installed and running.
+2. Create a new database (e.g., `taskmaster`).
+3. Update the `DATABASE_URL` in your `backend/.env` file to point to this database.
+4. Run `npx prisma generate` to create the Prisma Client based on your schema.
+5. Run `npx prisma migrate dev` inside the `backend` folder to apply the schema and create tables (`User`, `Task`, `TaskTracker`).
 
-## 📄 License
+## 📡 API Endpoints
 
-This project is licensed under the MIT License.
+### Auth & User (`/user`)
+
+- `POST /user` - Register a new user.
+- `POST /user/login` - Login and receive a JWT (set as HTTP-only cookie).
+- `POST /user/logout` - Logout (clears auth cookie).
+- `GET /user/validate` - Validate the current session/token.
+
+### Tasks (`/task`)
+
+- `GET /task` - Get all tasks for the logged-in user.
+- `POST /task` - Create a new task.
+- `GET /task/recent` - Get recently updated tasks.
+- `GET /task/:id` - Get details of a specific task.
+- `PATCH /task/:id` - Update a task (title, description, status, priority).
+- `DELETE /task/:id` - Delete a task.
+
+### Analytics & Operations
+
+- `GET /task/analytics` - Get productivity statistics (daily/weekly completion, time tracked).
+- `POST /task/:id/start` - Start tracking time for a task.
+- `POST /task/:id/pause` - Pause time tracking.
+- `POST /task/:id/done` - Mark a task as completed and save total time.
