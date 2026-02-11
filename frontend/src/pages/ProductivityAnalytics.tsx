@@ -116,33 +116,6 @@ function ProductivityAnalytics() {
       />
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
-        <StatCard
-          label="Total Tasks"
-          value={tasks.length}
-          icon={<ListTodo className="w-6 h-6" />}
-          color="blue"
-        />
-        <StatCard
-          label="Completed"
-          value={statusCounts.done}
-          icon={<CheckCircle2 className="w-6 h-6" />}
-          color="green"
-          trend={`${completionRate}% completion rate`}
-        />
-        <StatCard
-          label="In Progress"
-          value={statusCounts.running}
-          icon={<Clock className="w-6 h-6" />}
-          color="purple"
-        />
-        <StatCard
-          label="Paused"
-          value={statusCounts.paused}
-          icon={<Pause className="w-6 h-6" />}
-          color="orange"
-        />
-      </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
