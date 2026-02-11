@@ -18,11 +18,6 @@ import { Response, Request } from 'express';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('dummy')
-  dummyController(): string {
-    return 'This is a dummy controller';
-  }
-
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({ status: 201, description: 'User created successfully' })
@@ -64,10 +59,5 @@ export class UserController {
       throw new UnauthorizedException('No token found');
     }
     return this.userService.validateToken(token);
-  }
-
-  @Get('config-test')
-  getConfigTest(): Promise<string | undefined> {
-    return this.userService.displayConfugrefiles();
   }
 }

@@ -62,7 +62,7 @@ function DashboardCardContainer() {
       <h1 className="text-2xl text-white font-semibold">Recent Tasks</h1>
 
       {recentTasks.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="flex flex-wrap gap-6 mt-6">
           {recentTasks.map((task) => (
             <MainTaskCard
               key={task.id}
