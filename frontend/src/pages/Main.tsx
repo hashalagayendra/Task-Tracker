@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Dashboard from "./Dashboard";
 import TaskList from "./TaskList";
 import { useUser } from "../context/UserContext";
-
+import ProductivityAnalytics from "./ProductivityAnalytics";
 function Main() {
   const { currentSection } = useUser();
   return (
@@ -17,6 +17,7 @@ function Main() {
       <div className=" flex-1  py-8">
         {currentSection === "DashBoard" && <Dashboard />}
         {currentSection === "Tasks" && <TaskList />}
+        {currentSection === "Analyzing" && <ProductivityAnalytics />}
       </div>
     </div>
   );
