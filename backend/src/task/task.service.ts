@@ -58,7 +58,9 @@ export class TaskService {
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    // Delete related TaskTracker rows first (foreign key constraint)
+    await this.prisma.taskTracker.deleteMany({ where: { taskId: id } });
     return this.prisma.task.delete({ where: { id } });
   }
 
