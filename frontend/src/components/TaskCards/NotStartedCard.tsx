@@ -104,7 +104,7 @@ function NotStartedCard({
           <span className="text-base text-white">Estimated Time</span>
           <div className="flex -mt-1 items-baseline gap-1">
             <span className="text-6xl font-bold text-white">
-              {Math.floor(Number(timeEstimate.split(" ")[0]) / 60)}
+              {timeEstimate.split(" ")[0]}
             </span>
             <span className="text-lg font-bold text-white">Min</span>
           </div>

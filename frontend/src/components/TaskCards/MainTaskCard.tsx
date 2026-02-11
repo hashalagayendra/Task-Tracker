@@ -44,7 +44,7 @@ function MainTaskCard({
           date={date}
           priority={priorityLabel}
           timeEstimate={timeEstimate}
-          estimatedTimeSeconds={task.estimatedTime}
+          estimatedTimeSeconds={task.estimatedTime * 60}
           totalElapsedSeconds={task.totalElapsedSeconds || 0}
           activeTrackerStartTime={task.activeTrackerStartTime}
           onDelete={() => onDelete?.(task.id)}
@@ -60,7 +60,7 @@ function MainTaskCard({
           date={date}
           priority={priorityLabel}
           timeEstimate={timeEstimate}
-          estimatedTimeSeconds={task.estimatedTime}
+          estimatedTimeSeconds={task.estimatedTime * 60}
           totalElapsedSeconds={task.totalElapsedSeconds || 0}
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
@@ -76,7 +76,7 @@ function MainTaskCard({
           date={date}
           priority={priorityLabel}
           timeToSpend={task.timeToSpend || 0}
-          estimatedTimeSeconds={task.estimatedTime}
+          estimatedTimeSeconds={task.estimatedTime * 60}
           totalUsedSeconds={task.totalElapsedSeconds || 0}
           onDelete={() => onDelete?.(task.id)}
         />

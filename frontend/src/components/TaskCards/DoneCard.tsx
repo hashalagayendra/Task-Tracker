@@ -36,6 +36,7 @@ function DoneCard({
   const isEarly = timeToSpend >= 0;
   const absTimeToSpend = Math.abs(timeToSpend);
   const displayMinutes = Math.floor(absTimeToSpend / 60);
+  const displaySeconds = absTimeToSpend % 60;
 
   const progressPercent =
     estimatedTimeSeconds > 0
@@ -114,8 +115,12 @@ function DoneCard({
             className={`flex items-baseline gap-1 ${isEarly ? "text-green-500" : "text-red-500"}`}
           >
             <span className="text-5xl font-bold">{displayMinutes}</span>
+            <span className="text-base font-semibold opacity-70">m</span>
+            <span className="text-5xl font-bold ml-1">
+              {String(displaySeconds).padStart(2, "0")}
+            </span>
             <div className="flex flex-col items-start leading-none">
-              <span className="text-lg font-semibold">Min</span>
+              <span className="text-lg font-semibold">s</span>
               <span className="text-[10px] font-bold uppercase tracking-wider opacity-80">
                 {isEarly ? "Before" : "Late"}
               </span>
