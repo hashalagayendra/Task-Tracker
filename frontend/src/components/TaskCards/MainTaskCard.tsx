@@ -56,8 +56,11 @@ function MainTaskCard({
           date={date}
           priority={priorityLabel}
           timeEstimate={timeEstimate}
+          estimatedTimeSeconds={task.estimatedTime}
+          totalElapsedSeconds={task.totalElapsedSeconds || 0}
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
+          onResume={() => onStart?.(task.id)}
         />
       );
     case "notStarted":

@@ -6,16 +6,43 @@ function PausedCard({
   date,
   priority,
   timeEstimate,
+  estimatedTimeSeconds,
+  totalElapsedSeconds,
   onDelete,
   onUpdate,
+  onResume,
 }: {
   title: string;
   date: string;
   priority: string;
   timeEstimate: string;
+  estimatedTimeSeconds: number;
+  totalElapsedSeconds: number;
   onDelete?: () => void;
   onUpdate?: () => void;
+  onResume?: () => void;
 }) {
+  const remainingSeconds = Math.max(
+    0,
+    estimatedTimeSeconds - totalElapsedSeconds,
+  );
+  const displayMinutes = Math.floor(remainingSeconds / 60);
+  const displaySeconds = remainingSeconds % 60;
+  const progressPercent =
+    estimatedTimeSeconds > 0
+      ? Math.min(
+          100,
+          Math.round(
+            ((estimatedTimeSeconds - remainingSeconds) / estimatedTimeSeconds) *
+              100,
+          ),
+        )
+      : 0;
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  };
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -106,9 +133,11 @@ function PausedCard({
             TIME REMAINING
           </span>
           <div className="flex items-baseline gap-1 text-amber-400">
-            <span className="text-5xl font-bold">18</span>
+            <span className="text-5xl font-bold">{displayMinutes}</span>
             <span className="text-lg font-semibold text-zinc-400">m</span>
-            <span className="text-5xl font-bold">30</span>
+            <span className="text-5xl font-bold">
+              {String(displaySeconds).padStart(2, "0")}
+            </span>
             <span className="text-lg font-semibold text-zinc-400">s</span>
           </div>
         </div>
@@ -118,20 +147,25 @@ function PausedCard({
       <div className="mb-6">
         <div className="flex justify-between items-center text-xs text-zinc-400 mb-1">
           <span>00:00</span>
-          <span>00:20</span>
+          <span>{formatTime(estimatedTimeSeconds)}</span>
         </div>
         <div className="w-full bg-zinc-700 rounded-full h-2">
           <div
             className="bg-amber-400 h-2 rounded-full"
-            style={{ width: "80%" }}
+            style={{ width: `${progressPercent}%` }}
           ></div>
         </div>
-        <div className="text-right text-sm font-bold text-white mt-1">80%</div>
+        <div className="text-right text-sm font-bold text-white mt-1">
+          {progressPercent}%
+        </div>
       </div>
 
       {/* Action Buttons */}
       <div className="flex justify-between gap-4">
-        <button className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-semibold transition-colors w-full">
+        <button
+          onClick={() => onResume?.()}
+          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-semibold transition-colors w-full cursor-pointer"
+        >
           <PlayIcon size={16} />
           Resume
         </button>
