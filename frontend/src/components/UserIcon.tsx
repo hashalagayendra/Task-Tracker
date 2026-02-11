@@ -1,19 +1,21 @@
 import React from "react";
+import { useUser } from "../context/UserContext";
 
 function UserIcon() {
+  const { user } = useUser();
   return (
     <div className="flex items-center gap-3 flex-shrink-0 self-end sm:self-auto">
       {/* Avatar */}
       <div className="w-10 h-10 rounded-full bg-fuchsia-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-fuchsia-500/20">
-        {"H"}
+        {user?.name.charAt(0).toUpperCase()}
       </div>
 
       {/* User Info */}
       <div className="flex flex-col">
         <span className="text-sm font-semibold text-white leading-tight">
-          {"Hsala gayendra"}
+          {user?.name}
         </span>
-        <span className="text-xs text-zinc-500">{"@hslagayendra9987"}</span>
+        <span className="text-xs text-zinc-500">{user?.email}</span>
       </div>
     </div>
   );

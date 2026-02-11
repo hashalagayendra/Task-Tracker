@@ -20,5 +20,43 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   verify Boolean @default(false)
+  tasks Task[]
+  
 }
 
+enum TaskStatus {
+  notStarted
+  running
+  pause
+  done
+}
+
+enum TaskPriority {
+  high
+  medium
+  low
+}
+
+model Task {
+  id String @id @default(uuid())
+  title String?
+  description String?
+  status TaskStatus
+  priority TaskPriority
+  startTime DateTime?
+  endTime DateTime?
+  estimatedTime Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  taskTrackers TaskTracker[]
+}
+
+model TaskTracker{
+  id String @id @default(uuid())
+  taskId String
+  startTime DateTime
+  endTime DateTime
+  task Task @relation(fields: [taskId], references: [id])
+}
