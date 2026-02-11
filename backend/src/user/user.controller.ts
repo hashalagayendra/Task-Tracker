@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import { UserService } from './user.service';
+import { Response } from 'express';
 
 @ApiTags('user')
 @Controller('user')
@@ -18,5 +20,27 @@ export class UserController {
   @ApiResponse({ status: 201, description: 'User created successfully' })
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({ status: 200, description: 'Login successful' })
+  async login(
+    @Body() loginUserDto: LoginUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { access_token, user } = await this.userService.login(loginUserDto);
+    res.cookie('Authentication', access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+    return { message: 'Login successful', user };
+  }
+
+  @Get('config-test')
+  getConfigTest(): Promise<string | undefined> {
+    return this.userService.displayConfugrefiles();
   }
 }
