@@ -8,6 +8,7 @@ interface MainTaskCardProps {
   onDelete?: (id: string) => void;
   onUpdate?: (id: string) => void;
   onStart?: (id: string) => void;
+  onPause?: (id: string) => void;
 }
 
 function MainTaskCard({
@@ -15,6 +16,7 @@ function MainTaskCard({
   onDelete,
   onUpdate,
   onStart,
+  onPause,
 }: MainTaskCardProps) {
   const priorityLabel =
     task.priority === "high"
@@ -44,6 +46,7 @@ function MainTaskCard({
           activeTrackerStartTime={task.activeTrackerStartTime}
           onDelete={() => onDelete?.(task.id)}
           onUpdate={() => onUpdate?.(task.id)}
+          onPause={() => onPause?.(task.id)}
         />
       );
     case "pause":

@@ -11,6 +11,7 @@ function RunningCard({
   activeTrackerStartTime,
   onDelete,
   onUpdate,
+  onPause,
 }: {
   title: string;
   date: string;
@@ -21,6 +22,7 @@ function RunningCard({
   activeTrackerStartTime?: string;
   onDelete?: () => void;
   onUpdate?: () => void;
+  onPause?: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -181,7 +183,10 @@ function RunningCard({
 
       {/* Action Buttons */}
       <div className="flex justify-between gap-4">
-        <button className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-semibold transition-colors w-full">
+        <button
+          onClick={() => onPause?.()}
+          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-semibold transition-colors w-full cursor-pointer"
+        >
           <Pause size={16} />
           Pause
         </button>

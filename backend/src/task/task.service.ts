@@ -94,4 +94,48 @@ export class TaskService {
       activeTracker,
     };
   }
+
+  async pauseTask(taskId: string) {
+    // 1. Update task status to pause
+    const task = await this.prisma.task.update({
+      where: { id: taskId },
+      data: { status: 'pause' },
+    });
+
+    // 2. Find the latest tracker row that has no pauseTime (active row)
+    const activeTracker = await this.prisma.taskTracker.findFirst({
+      where: { taskId, pauseTime: null },
+      orderBy: { startTime: 'desc' },
+    });
+
+    if (activeTracker) {
+      const now = new Date();
+      const timeDiff = Math.floor(
+        (now.getTime() - new Date(activeTracker.startTime).getTime()) / 1000,
+      );
+
+      // 3. Update the active tracker with pauseTime and timeDeference
+      await this.prisma.taskTracker.update({
+        where: { id: activeTracker.id },
+        data: {
+          pauseTime: now,
+          timeDeference: timeDiff,
+        },
+      });
+    }
+
+    // 4. Get total elapsed seconds from all tracker rows
+    const allTrackers = await this.prisma.taskTracker.findMany({
+      where: { taskId },
+    });
+
+    const totalElapsedSeconds = allTrackers.reduce((sum, tracker) => {
+      return sum + (tracker.timeDeference || 0);
+    }, 0);
+
+    return {
+      task,
+      totalElapsedSeconds,
+    };
+  }
 }

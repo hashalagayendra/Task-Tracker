@@ -37,6 +37,7 @@ interface UserContextType {
   deleteTask: (id: string) => Promise<void>;
   addTask: (task: Task) => void;
   startTask: (id: string) => Promise<void>;
+  pauseTask: (id: string) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -108,6 +109,29 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const pauseTask = async (id: string) => {
+    try {
+      const res = await axios.post(`/task/${id}/pause`);
+      const { task, totalElapsedSeconds } = res.data;
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === id
+            ? {
+                ...t,
+                ...task,
+                totalElapsedSeconds,
+                activeTrackerStartTime: undefined,
+              }
+            : t,
+        ),
+      );
+      toast.success("Task paused!");
+    } catch (error) {
+      console.error("Error pausing task:", error);
+      toast.error("Failed to pause task");
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -122,6 +146,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         deleteTask,
         addTask,
         startTask,
+        pauseTask,
       }}
     >
       {children}
