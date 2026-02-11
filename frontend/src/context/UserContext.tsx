@@ -38,6 +38,7 @@ interface UserContextType {
   fetchTasks: () => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
   addTask: (task: Task) => void;
+  updateTask: (updatedTask: Task) => void;
   startTask: (id: string) => Promise<void>;
   pauseTask: (id: string) => Promise<void>;
   completeTask: (id: string, timeToSpend: number) => Promise<void>;
@@ -96,6 +97,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const addTask = (task: Task) => {
     setTasks((prev) => [...prev, task]);
+  };
+
+  const updateTask = (updatedTask: Task) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === updatedTask.id ? { ...t, ...updatedTask } : t)),
+    );
   };
 
   const startTask = async (id: string) => {
@@ -180,6 +187,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         fetchTasks,
         deleteTask,
         addTask,
+        updateTask,
         startTask,
         pauseTask,
         completeTask,

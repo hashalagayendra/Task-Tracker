@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
+import type { Task } from "../context/UserContext";
 import MainTaskCard from "./TaskCards/MainTaskCard";
+import UpdateTaskModal from "./UpdateTaskModal";
 
 function TaskPageCardContainer() {
   const {
@@ -8,6 +10,7 @@ function TaskPageCardContainer() {
     tasksLoading,
     fetchTasks,
     deleteTask,
+    updateTask,
     startTask,
     pauseTask,
     completeTask,
@@ -17,6 +20,8 @@ function TaskPageCardContainer() {
     filterPriority,
     setFilterPriority,
   } = useUser();
+
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   useEffect(() => {
     fetchTasks();
@@ -40,8 +45,8 @@ function TaskPageCardContainer() {
   });
 
   const handleUpdate = (id: string) => {
-    // TODO: Open update modal
-    console.log("Update task:", id);
+    const task = tasks.find((t) => t.id === id);
+    if (task) setEditingTask(task);
   };
 
   const statusFilters = [
@@ -136,6 +141,18 @@ function TaskPageCardContainer() {
           </div>
         )}
       </div>
+
+      {/* Update Task Modal */}
+      {editingTask && (
+        <UpdateTaskModal
+          task={editingTask}
+          onClose={() => setEditingTask(null)}
+          onUpdated={(updatedTask) => {
+            updateTask(updatedTask);
+            setEditingTask(null);
+          }}
+        />
+      )}
     </div>
   );
 }

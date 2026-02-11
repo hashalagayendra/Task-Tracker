@@ -22,6 +22,25 @@ export class TaskService {
     });
   }
 
+  async update(id: string, updateTaskDto: UpdateTaskDto) {
+    const data: any = {};
+    if (updateTaskDto.title !== undefined) data.title = updateTaskDto.title;
+    if (updateTaskDto.description !== undefined)
+      data.description = updateTaskDto.description;
+    if (updateTaskDto.priority !== undefined)
+      data.priority = updateTaskDto.priority;
+    if (updateTaskDto.estimatedTime !== undefined)
+      data.estimatedTime = updateTaskDto.estimatedTime * 60; // convert minutes to seconds
+
+    const task = await this.prisma.task.update({
+      where: { id },
+      data,
+      include: { taskTrackers: true },
+    });
+
+    return this.formatTaskWithMetrics(task);
+  }
+
   async findAll() {
     const tasks = await this.prisma.task.findMany({
       include: { taskTrackers: true },
@@ -57,17 +76,6 @@ export class TaskService {
       totalElapsedSeconds,
       activeTrackerStartTime: activeTracker?.startTime || null,
     };
-  }
-
-  findOne(id: string) {
-    return this.prisma.task.findUnique({ where: { id } });
-  }
-
-  update(id: string, updateTaskDto: UpdateTaskDto) {
-    return this.prisma.task.update({
-      where: { id },
-      data: updateTaskDto,
-    });
   }
 
   async remove(id: string) {

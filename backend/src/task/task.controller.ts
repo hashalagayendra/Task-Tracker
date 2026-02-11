@@ -48,6 +48,16 @@ export class TaskController {
     return this.taskService.remove(id);
   }
 
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update a task' })
+  @ApiResponse({
+    status: 200,
+    description: 'The task has been successfully updated.',
+  })
+  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+    return this.taskService.update(id, updateTaskDto);
+  }
+
   @Post(':id/start')
   @ApiOperation({ summary: 'Start tracking time for a task' })
   @ApiResponse({ status: 200, description: 'Task timer started.' })

@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
+import type { Task } from "../context/UserContext";
 import MainTaskCard from "./TaskCards/MainTaskCard";
+import UpdateTaskModal from "./UpdateTaskModal";
 
 function DashboardCardContainer() {
   const {
@@ -8,6 +10,7 @@ function DashboardCardContainer() {
     tasksLoading,
     fetchTasks,
     deleteTask,
+    updateTask,
     startTask,
     pauseTask,
     completeTask,
@@ -15,6 +18,8 @@ function DashboardCardContainer() {
     filterStatus,
     filterPriority,
   } = useUser();
+
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   useEffect(() => {
     fetchTasks();
@@ -46,6 +51,11 @@ function DashboardCardContainer() {
     )
     .slice(0, 3);
 
+  const handleUpdate = (id: string) => {
+    const task = tasks.find((t) => t.id === id);
+    if (task) setEditingTask(task);
+  };
+
   if (tasksLoading) {
     return (
       <div className="mt-10">
@@ -68,6 +78,7 @@ function DashboardCardContainer() {
               key={task.id}
               task={task}
               onDelete={deleteTask}
+              onUpdate={handleUpdate}
               onStart={startTask}
               onPause={pauseTask}
               onComplete={completeTask}
@@ -87,6 +98,18 @@ function DashboardCardContainer() {
               : "Create your first task to see it here!"}
           </p>
         </div>
+      )}
+
+      {/* Update Task Modal */}
+      {editingTask && (
+        <UpdateTaskModal
+          task={editingTask}
+          onClose={() => setEditingTask(null)}
+          onUpdated={(updatedTask) => {
+            updateTask(updatedTask);
+            setEditingTask(null);
+          }}
+        />
       )}
     </div>
   );
