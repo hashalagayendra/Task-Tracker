@@ -47,6 +47,14 @@ export class UserController {
     return { message: 'Login successful', user };
   }
 
+  @Post('logout')
+  @ApiOperation({ summary: 'Logout user' })
+  @ApiResponse({ status: 200, description: 'Logout successful' })
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('Authentication');
+    return { message: 'Logout successful' };
+  }
+
   @Get('validate')
   @ApiOperation({ summary: 'Validate user token' })
   @ApiResponse({ status: 200, description: 'Token is valid' })

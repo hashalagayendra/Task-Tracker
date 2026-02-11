@@ -1,9 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 function Sidebar() {
-  const { currentSection, setCurrentSection } = useUser();
+  const { currentSection, setCurrentSection, clearUser } = useUser();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/user/logout");
+      clearUser();
+      navigate("/login");
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error("Logout failed", error);
+      // Even if backend fails, clear frontend state
+      clearUser();
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="w-full  h-screen bg-(--sidebar-bg) flex flex-col  ">
@@ -39,7 +56,10 @@ function Sidebar() {
         </div>
       </div>
       <div className="w-full  flex gap-4 justify-center px-10 py-2">
-        <button className="border-2 w-full border-red-600 bg-red-600/10 rounded-md px-4 py-2 text-white">
+        <button
+          onClick={handleLogout}
+          className="border-2 w-full border-red-600 bg-red-600/10 rounded-md px-4 py-2 text-white hover:bg-red-600 hover:text-white transition-colors cursor-pointer"
+        >
           Log Out
         </button>
       </div>
