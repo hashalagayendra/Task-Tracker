@@ -1,24 +1,70 @@
-import React from "react";
-import { PlayIcon, MoreHorizontal } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { PlayIcon, MoreHorizontal, Trash2, Pencil } from "lucide-react";
 
 function NotStartedCard({
   title,
   date,
   priority,
   timeEstimate,
+  onDelete,
+  onUpdate,
 }: {
   title: string;
   date: string;
   priority: string;
   timeEstimate: string;
+  onDelete?: () => void;
+  onUpdate?: () => void;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-blue-600 transition-colors group  max-w-[350px]">
       {/* Header Section */}
       <div className="flex justify-between items-start mb-4 gap-2 ">
         <h3 className="text-base font-bold text-white">{title}</h3>
-        <div className="text-zinc-400">
-          <MoreHorizontal size={20} />
+        <div className="relative" ref={menuRef}>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+          >
+            <MoreHorizontal size={20} />
+          </button>
+          {menuOpen && (
+            <div className="absolute right-0 top-8 z-50 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl py-1 min-w-[160px]">
+              <button
+                onClick={() => {
+                  onUpdate?.();
+                  setMenuOpen(false);
+                }}
+                className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-zinc-300 hover:bg-zinc-700 hover:text-white transition-colors"
+              >
+                <Pencil size={14} />
+                Update Task
+              </button>
+              <button
+                onClick={() => {
+                  onDelete?.();
+                  setMenuOpen(false);
+                }}
+                className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-400 hover:bg-red-900/30 hover:text-red-300 transition-colors"
+              >
+                <Trash2 size={14} />
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
