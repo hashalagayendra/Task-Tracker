@@ -11,6 +11,10 @@ export default defineConfig({
         target: "http://localhost:3000",
         changeOrigin: true,
       },
+      "/task": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
       "/api": {
         // keeping this just in case they fix backend or use it for swagger
         target: "http://localhost:3000",

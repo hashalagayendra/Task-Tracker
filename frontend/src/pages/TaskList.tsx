@@ -1,14 +1,15 @@
-import React from "react";
-import Sidebar from "../components/Sidebar";
-import StatCard from "../components/StatCard";
-import DashboardHeadder from "../components/DashboardHeadder";
-import DashboardCardContainer from "../components/DashboardCardContainer";
+import { useState } from "react";
+import CreateTaskModal from "../components/CreateTaskModal";
 import TaskPageHeadder from "../components/TaskPageHeadder";
-import { Search } from "lucide-react";
 import SearchBox from "../components/SearchBox";
 import TaskPageCardContainer from "../components/TaskPageCardContainer";
 
 function TaskList() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
   return (
     <div className=" flex-1 px-10 py-8">
       <TaskPageHeadder
@@ -22,12 +23,25 @@ function TaskList() {
             Filter
           </div>
         </div>
-        <button className="px-10 py-2 text-white font-semibold bg-blue-600 rounded-md">
-          {" Add Task "}
+        <button
+          onClick={handleOpenModal}
+          className="px-10 py-2 text-white font-semibold bg-blue-600 rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
+        >
+          Add Task
         </button>
       </div>
 
       <TaskPageCardContainer />
+
+      {isModalOpen && (
+        <CreateTaskModal
+          onClose={handleCloseModal}
+          onSuccess={() => {
+            // Optional: refresh tasks here if needed
+            // For now just close the modal
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -23,6 +23,7 @@ export class TaskController {
   create(@Body() createTaskDto: CreateTaskDto) {
     // For now, allow passing userId in body for testing, or default to temp.
     const userId = createTaskDto.userId || 'temp-user-id';
+    console.log(createTaskDto);
     return this.taskService.create(createTaskDto, userId);
   }
 
