@@ -147,13 +147,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const completeTask = async (id: string, timeToSpend: number) => {
     try {
       const res = await axios.post(`/task/${id}/done`, { timeToSpend });
-      const { task } = res.data;
+      const { task, totalElapsedSeconds } = res.data;
       setTasks((prev) =>
         prev.map((t) =>
           t.id === id
             ? {
                 ...t,
                 ...task,
+                totalElapsedSeconds,
                 activeTrackerStartTime: undefined,
               }
             : t,

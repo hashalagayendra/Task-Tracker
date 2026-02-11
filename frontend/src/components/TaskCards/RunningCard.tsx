@@ -205,7 +205,7 @@ function RunningCard({
         </button>
         <button
           onClick={() => onComplete?.(remainingSeconds)}
-          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-green-800/50 hover:bg-green-700/50 border border-green-600 text-green-400 text-sm font-semibold transition-colors w-full cursor-pointer"
+          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-green-500 hover:bg-green-700 border border-green-600 text-white text-sm font-semibold transition-colors w-full cursor-pointer"
         >
           Mark as Done
         </button>

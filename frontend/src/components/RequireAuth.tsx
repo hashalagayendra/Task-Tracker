@@ -32,8 +32,10 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
 
   if (isAuthenticated === null) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
+      <div className="flex justify-center items-center h-screen bg-(--bg-color)">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-(--accent-blue)">
+          Loading...
+        </div>
       </div>
     ); // Or a proper spinner component
   }

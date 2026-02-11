@@ -111,7 +111,7 @@ function TaskPageCardContainer() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-green-400/5 to-(--bg-color) px-7 pt-5 pb-10 rounded-xl border border-green-500/20">
+      <div className="bg-gradient-to-r from-blue-400/5 to-(--bg-color) px-7 pt-5 pb-10 rounded-xl border border-blue-500/20">
         {tasksLoading ? (
           <p className="text-zinc-400 text-center py-10">Loading tasks...</p>
         ) : filteredTasks.length === 0 ? (

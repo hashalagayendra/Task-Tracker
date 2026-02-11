@@ -34,9 +34,9 @@ function DoneCard({
   }, []);
 
   const isEarly = timeToSpend >= 0;
-  const absTimeToSpend = Math.abs(timeToSpend);
-  const displayMinutes = Math.floor(absTimeToSpend / 60);
-  const displaySeconds = absTimeToSpend % 60;
+  const timeDiffSeconds = Math.abs(estimatedTimeSeconds - totalUsedSeconds);
+  const displayMinutes = Math.floor(timeDiffSeconds / 60);
+  const displaySeconds = timeDiffSeconds % 60;
 
   const progressPercent =
     estimatedTimeSeconds > 0
@@ -50,10 +50,12 @@ function DoneCard({
   };
 
   return (
-    <div className="p-6 bg-zinc-900 border border-green-500/50 border-t-2 border-t-green-500 rounded-xl group max-w-[350px]">
+    <div className="p-6 bg-zinc-900 rounded-xl group min-w-[350px]">
       {/* Status Header */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-bold text-green-500">Completed</span>
+        <span className="text-sm font-bold text-green-500 -mt-6">
+          Completed
+        </span>
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -79,12 +81,12 @@ function DoneCard({
       </div>
 
       {/* Header Section */}
-      <div className="flex justify-between items-start mb-4 gap-2">
+      <div className="flex justify-between items-start -mt-8 mb-4 gap-2">
         <h3 className="text-lg font-bold text-white">{title}</h3>
       </div>
 
       {/* Description */}
-      <p className="text-sm text-zinc-400 mb-6 line-clamp-2">
+      <p className="text-sm text-zinc-400 mb-6 line-clamp-2 -mt-2">
         {description || "No description provided for this task."}
       </p>
 
@@ -115,12 +117,14 @@ function DoneCard({
             className={`flex items-baseline gap-1 ${isEarly ? "text-green-500" : "text-red-500"}`}
           >
             <span className="text-5xl font-bold">{displayMinutes}</span>
-            <span className="text-base font-semibold opacity-70">m</span>
+            <span className="text-base text-zinc-400 font-semibold opacity-70">
+              m
+            </span>
             <span className="text-5xl font-bold ml-1">
               {String(displaySeconds).padStart(2, "0")}
             </span>
             <div className="flex flex-col items-start leading-none">
-              <span className="text-lg font-semibold">s</span>
+              <span className="text-lg text-zinc-400 font-semibold">s</span>
               <span className="text-[10px] font-bold uppercase tracking-wider opacity-80">
                 {isEarly ? "Before" : "Late"}
               </span>
@@ -131,15 +135,15 @@ function DoneCard({
 
       {/* Progress Section */}
       <div className="mb-6">
-        <div className="flex justify-between items-center text-xs text-zinc-400 mb-1">
-          <span>00:00</span>
-          <span>{formatTime(estimatedTimeSeconds)}</span>
-        </div>
         <div className="w-full bg-zinc-700 rounded-full h-2">
           <div
             className={`${isEarly ? "bg-green-500" : "bg-red-500"} h-2 rounded-full transition-all duration-1000`}
             style={{ width: `${Math.min(progressPercent, 100)}%` }}
           ></div>
+        </div>
+        <div className="flex justify-between items-center text-xs text-zinc-400 mt-1">
+          <span>Time: {formatTime(totalUsedSeconds)}</span>
+          <span>Est: {formatTime(estimatedTimeSeconds)}</span>
         </div>
         <div
           className={`text-right text-sm font-bold mt-1 ${isEarly ? "text-green-500" : "text-white"}`}
