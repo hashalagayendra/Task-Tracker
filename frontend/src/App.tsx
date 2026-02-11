@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import Main from "./pages/Main";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 
 import RequireAuth from "./components/RequireAuth";
 
@@ -15,6 +16,7 @@ function App() {
       <Toaster position="top-center" />
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route
             path="/dashboard"
             element={

@@ -43,6 +43,10 @@ interface UserContextType {
   completeTask: (id: string, timeToSpend: number) => Promise<void>;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  filterStatus: string;
+  setFilterStatus: (status: string) => void;
+  filterPriority: string;
+  setFilterPriority: (priority: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -55,6 +59,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [tasksLoading, setTasksLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterPriority, setFilterPriority] = useState("all");
 
   const setUser = (user: User) => {
     setUserState(user);
@@ -178,6 +184,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
         completeTask,
         searchQuery,
         setSearchQuery,
+        filterStatus,
+        setFilterStatus,
+        filterPriority,
+        setFilterPriority,
       }}
     >
       {children}

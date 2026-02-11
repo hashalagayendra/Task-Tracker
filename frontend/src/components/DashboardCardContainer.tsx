@@ -12,20 +12,33 @@ function DashboardCardContainer() {
     pauseTask,
     completeTask,
     searchQuery,
+    filterStatus,
+    filterPriority,
   } = useUser();
 
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // Filter tasks based on searchQuery and Sort tasks by updatedAt in descending order to get the most recent ones
+  // Filter tasks based on searchQuery, status, and priority
+  // Sort tasks by updatedAt in descending order to get the most recent ones
   const recentTasks = tasks
     .filter((task) => {
+      // Search match
       const query = searchQuery.toLowerCase();
-      return (
+      const searchMatch =
         task.title?.toLowerCase().includes(query) ||
-        task.description?.toLowerCase().includes(query)
-      );
+        task.description?.toLowerCase().includes(query);
+
+      // Status filter match
+      const statusMatch =
+        filterStatus === "all" || task.status === filterStatus;
+
+      // Priority filter match
+      const priorityMatch =
+        filterPriority === "all" || task.priority === filterPriority;
+
+      return searchMatch && statusMatch && priorityMatch;
     })
     .sort(
       (a, b) =>
@@ -63,8 +76,16 @@ function DashboardCardContainer() {
         </div>
       ) : (
         <div className="mt-10 p-10 bg-zinc-900/50 border border-zinc-800 border-dashed rounded-xl flex flex-col items-center justify-center text-zinc-500">
-          <p className="text-lg">No tasks found</p>
-          <p className="text-sm">Create your first task to see it here!</p>
+          <p className="text-lg">
+            {searchQuery || filterStatus !== "all" || filterPriority !== "all"
+              ? "No tasks match your filters"
+              : "No tasks found"}
+          </p>
+          <p className="text-sm">
+            {searchQuery || filterStatus !== "all" || filterPriority !== "all"
+              ? "Adjust your filters to see more tasks"
+              : "Create your first task to see it here!"}
+          </p>
         </div>
       )}
     </div>
