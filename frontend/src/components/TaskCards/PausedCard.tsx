@@ -22,20 +22,16 @@ function PausedCard({
   onUpdate?: () => void;
   onResume?: () => void;
 }) {
-  const remainingSeconds = Math.max(
-    0,
-    estimatedTimeSeconds - totalElapsedSeconds,
-  );
-  const displayMinutes = Math.floor(remainingSeconds / 60);
-  const displaySeconds = remainingSeconds % 60;
+  const remainingSeconds = estimatedTimeSeconds - totalElapsedSeconds;
+  const isOvertime = remainingSeconds < 0;
+  const absRemaining = Math.abs(remainingSeconds);
+  const displayMinutes = Math.floor(absRemaining / 60);
+  const displaySeconds = absRemaining % 60;
   const progressPercent =
     estimatedTimeSeconds > 0
-      ? Math.min(
-          100,
-          Math.round(
-            ((estimatedTimeSeconds - remainingSeconds) / estimatedTimeSeconds) *
-              100,
-          ),
+      ? Math.round(
+          ((estimatedTimeSeconds - remainingSeconds) / estimatedTimeSeconds) *
+            100,
         )
       : 0;
   const formatTime = (s: number) => {
@@ -132,8 +128,13 @@ function PausedCard({
           <span className="text-xs text-zinc-400 tracking-wider">
             TIME REMAINING
           </span>
-          <div className="flex items-baseline gap-1 text-amber-400">
-            <span className="text-5xl font-bold">{displayMinutes}</span>
+          <div
+            className={`flex items-baseline gap-1 ${isOvertime ? "text-red-400" : "text-amber-400"}`}
+          >
+            <span className="text-5xl font-bold">
+              {isOvertime ? "-" : ""}
+              {displayMinutes}
+            </span>
             <span className="text-lg font-semibold text-zinc-400">m</span>
             <span className="text-5xl font-bold">
               {String(displaySeconds).padStart(2, "0")}
@@ -151,11 +152,13 @@ function PausedCard({
         </div>
         <div className="w-full bg-zinc-700 rounded-full h-2">
           <div
-            className="bg-amber-400 h-2 rounded-full"
-            style={{ width: `${progressPercent}%` }}
+            className={`${isOvertime ? "bg-red-500" : "bg-amber-400"} h-2 rounded-full`}
+            style={{ width: `${Math.min(progressPercent, 100)}%` }}
           ></div>
         </div>
-        <div className="text-right text-sm font-bold text-white mt-1">
+        <div
+          className={`text-right text-sm font-bold mt-1 ${isOvertime ? "text-red-400" : "text-white"}`}
+        >
           {progressPercent}%
         </div>
       </div>

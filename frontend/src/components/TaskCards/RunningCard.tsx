@@ -49,7 +49,7 @@ function RunningCard({
         : 0;
       const remaining =
         estimatedTimeSeconds - totalElapsedSeconds - liveElapsed;
-      setRemainingSeconds(Math.max(0, remaining));
+      setRemainingSeconds(remaining);
     };
 
     calcRemaining();
@@ -57,14 +57,16 @@ function RunningCard({
     return () => clearInterval(interval);
   }, [estimatedTimeSeconds, totalElapsedSeconds, activeTrackerStartTime]);
 
-  const displayMinutes = Math.floor(remainingSeconds / 60);
-  const displaySeconds = remainingSeconds % 60;
+  const isOvertime = remainingSeconds < 0;
+  const absRemaining = Math.abs(remainingSeconds);
+  const displayMinutes = Math.floor(absRemaining / 60);
+  const displaySeconds = absRemaining % 60;
 
   // Progress calculation
   const totalUsed = estimatedTimeSeconds - remainingSeconds;
   const progressPercent =
     estimatedTimeSeconds > 0
-      ? Math.min(100, Math.round((totalUsed / estimatedTimeSeconds) * 100))
+      ? Math.round((totalUsed / estimatedTimeSeconds) * 100)
       : 0;
 
   const formatTime = (s: number) => {
@@ -151,12 +153,19 @@ function RunningCard({
           <span className="text-xs text-zinc-400 tracking-wider">
             TIME REMAINING
           </span>
-          <div className="flex items-baseline gap-1">
-            <span className="text-5xl font-bold text-white">
+          <div
+            className={`flex items-baseline gap-1 ${isOvertime ? "text-red-400" : ""}`}
+          >
+            <span
+              className={`text-5xl font-bold ${isOvertime ? "text-red-400" : "text-white"}`}
+            >
+              {isOvertime ? "-" : ""}
               {displayMinutes}
             </span>
             <span className="text-lg font-semibold text-zinc-400">m</span>
-            <span className="text-5xl font-bold text-white">
+            <span
+              className={`text-5xl font-bold ${isOvertime ? "text-red-400" : "text-white"}`}
+            >
               {String(displaySeconds).padStart(2, "0")}
             </span>
             <span className="text-lg font-semibold text-zinc-400">s</span>
@@ -172,11 +181,13 @@ function RunningCard({
         </div>
         <div className="w-full bg-zinc-700 rounded-full h-2">
           <div
-            className="bg-lime-400 h-2 rounded-full transition-all duration-1000"
-            style={{ width: `${progressPercent}%` }}
+            className={`${isOvertime ? "bg-red-500" : "bg-lime-400"} h-2 rounded-full transition-all duration-1000`}
+            style={{ width: `${Math.min(progressPercent, 100)}%` }}
           ></div>
         </div>
-        <div className="text-right text-sm font-bold text-white mt-1">
+        <div
+          className={`text-right text-sm font-bold mt-1 ${isOvertime ? "text-red-400" : "text-white"}`}
+        >
           {progressPercent}%
         </div>
       </div>
