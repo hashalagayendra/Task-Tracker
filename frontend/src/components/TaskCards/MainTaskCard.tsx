@@ -1,6 +1,7 @@
 import NotStartedCard from "./NotStartedCard";
 import PausedCard from "./PausedCard";
 import RunningCard from "./RunningCard";
+import DoneCard from "./DoneCard";
 import type { Task } from "../../context/UserContext";
 
 interface MainTaskCardProps {
@@ -67,8 +68,20 @@ function MainTaskCard({
           onComplete={(timeToSpend) => onComplete?.(task.id, timeToSpend)}
         />
       );
-    case "notStarted":
     case "done":
+      return (
+        <DoneCard
+          title={task.title || "Untitled Task"}
+          description={task.description}
+          date={date}
+          priority={priorityLabel}
+          timeToSpend={task.timeToSpend || 0}
+          estimatedTimeSeconds={task.estimatedTime}
+          totalUsedSeconds={task.totalElapsedSeconds || 0}
+          onDelete={() => onDelete?.(task.id)}
+        />
+      );
+    case "notStarted":
     default:
       return (
         <NotStartedCard

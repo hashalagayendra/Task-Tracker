@@ -15,6 +15,7 @@ export interface Task {
   status: "notStarted" | "running" | "pause" | "done";
   priority: "high" | "medium" | "low";
   estimatedTime: number;
+  timeToSpend?: number;
   startTime?: string;
   endTime?: string;
   createdAt: string;
