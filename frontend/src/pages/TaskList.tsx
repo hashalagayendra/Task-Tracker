@@ -11,24 +11,21 @@ function TaskList() {
   const handleCloseModal = () => setIsModalOpen(false);
 
   return (
-    <div className=" flex-1 px-10 py-8">
+    <div className="flex-1 px-4 md:px-10 py-8 overflow-y-auto h-full">
       <TaskPageHeadder
         title="My Task"
         subtitle="Stay Organized, Complete Tasks, Achieve Goals "
       />
-      <div className="flex justify-between mt-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-10">
         <SearchBox />
-        <div>
-          <div className="px-10 py-2 bg-zinc-500/10 rounded-md text-white">
-            Filter
-          </div>
+        <div className="flex gap-4">
+          <button
+            onClick={handleOpenModal}
+            className="flex-1 md:flex-none px-10 py-2 text-white font-semibold bg-blue-600 rounded-md hover:bg-blue-700 transition-colors cursor-pointer text-center"
+          >
+            Add Task
+          </button>
         </div>
-        <button
-          onClick={handleOpenModal}
-          className="px-10 py-2 text-white font-semibold bg-blue-600 rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
-        >
-          Add Task
-        </button>
       </div>
 
       <TaskPageCardContainer />

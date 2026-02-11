@@ -50,7 +50,7 @@ function DoneCard({
   };
 
   return (
-    <div className="p-6 bg-zinc-900 rounded-xl group min-w-[350px]">
+    <div className="p-6 bg-zinc-900 rounded-xl group w-[350px]">
       {/* Status Header */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm font-bold text-green-500 -mt-6">

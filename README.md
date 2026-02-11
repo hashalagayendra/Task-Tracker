@@ -11,6 +11,20 @@ Task Master is a modern productivity and task tracking application designed to h
 - **Authentication**: Secure user signup and login functionality.
 - **Responsive Design**: A premium, dark-themed UI that works seamlessly across devices.
 
+## 📸 Screenshots
+
+### Task Management — Active Tasks
+
+![Task Management — Active Tasks](./screenshots/Screenshot%202026-02-11%20231142.png)
+
+### Task Management — Completed Tasks
+
+![Task Management — Completed Tasks](./screenshots/Screenshot%202026-02-11%20231827.png)
+
+### Productivity Analytics
+
+![Productivity Analytics](./screenshots/Screenshot%202026-02-11%20231846.png)
+
 ## 🛠️ Technologies Used
 
 ### Frontend
