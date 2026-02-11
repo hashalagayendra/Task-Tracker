@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useUser } from "../context/UserContext";
+
 function Sidebar() {
-  type SidebarItems = "Dashboard" | "Task" | "Analyzing";
-  const [active, setActive] = useState<SidebarItems>("Dashboard");
+  const { currentSection, setCurrentSection } = useUser();
+
   return (
     <div className="w-full  h-screen bg-(--sidebar-bg) flex flex-col  ">
       <div className="w-full h-20 pt-5">
@@ -19,20 +20,20 @@ function Sidebar() {
       </div>
       <div className="mt-20 h-full flex flex-col gap-4 px-10">
         <div
-          className={` text-white/75 transform transition-all duration-200 hover:text-white w-full py-2  hover:bg-white/10 text-center rounded-md font-semibold ${active === "Dashboard" ? "!bg-blue-600 !text-white" : ""}`}
-          onClick={() => setActive("Dashboard")}
+          className={` text-white/75 transform transition-all duration-200 hover:text-white w-full py-2  hover:bg-white/10 text-center rounded-md font-semibold ${currentSection === "DashBoard" ? "!bg-blue-600 !text-white" : ""}`}
+          onClick={() => setCurrentSection("DashBoard")}
         >
           Dash Board
         </div>
         <div
-          className={` text-white/75 transform transition-all duration-200 hover:text-white w-full py-2 hover:bg-white/10 text-center rounded-md font-semibold ${active === "Task" ? "!bg-blue-600 !text-white" : ""}`}
-          onClick={() => setActive("Task")}
+          className={` text-white/75 transform transition-all duration-200 hover:text-white w-full py-2 hover:bg-white/10 text-center rounded-md font-semibold ${currentSection === "Tasks" ? "!bg-blue-600 !text-white" : ""}`}
+          onClick={() => setCurrentSection("Tasks")}
         >
           Tasks
         </div>
         <div
-          className={` text-white/75 transform transition-all duration-200 hover:text-white w-full py-2 hover:bg-white/10 text-center rounded-md font-semibold ${active === "Analyzing" ? "!bg-blue-600 !text-white" : ""}`}
-          onClick={() => setActive("Analyzing")}
+          className={` text-white/75 transform transition-all duration-200 hover:text-white w-full py-2 hover:bg-white/10 text-center rounded-md font-semibold ${currentSection === "Analyzing" ? "!bg-blue-600 !text-white" : ""}`}
+          onClick={() => setCurrentSection("Analyzing")}
         >
           Analyzing
         </div>

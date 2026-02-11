@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useUser } from "../context/UserContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { setUser } = useUser();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,9 +29,13 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.promise(
-      loginUser().then(() => {
-        // Redirect after successful login
-        // Optional: you might want to fetch user profile here or let a context handle it
+      loginUser().then((data) => {
+        // Set user data in Context
+        setUser({
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+        });
         setTimeout(() => navigate("/dashboard"), 1000);
       }),
       {
