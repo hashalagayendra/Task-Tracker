@@ -22,8 +22,29 @@ export class TaskService {
     });
   }
 
-  findAll() {
-    return this.prisma.task.findMany();
+  async findAll() {
+    const tasks = await this.prisma.task.findMany({
+      include: { taskTrackers: true },
+    });
+
+    return tasks.map((task) => {
+      const totalElapsedSeconds = task.taskTrackers.reduce(
+        (sum, tracker) => sum + (tracker.timeDeference || 0),
+        0,
+      );
+
+      // Find the active tracker (has startTime but no pauseTime)
+      const activeTracker = task.taskTrackers.find(
+        (t) => t.startTime && !t.pauseTime,
+      );
+
+      const { taskTrackers, ...taskData } = task;
+      return {
+        ...taskData,
+        totalElapsedSeconds,
+        activeTrackerStartTime: activeTracker?.startTime || null,
+      };
+    });
   }
 
   findOne(id: string) {
