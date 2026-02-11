@@ -31,7 +31,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { user } = useUser();
+  const { user, addTask } = useUser();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<TaskPriority>(TaskPriority.low);
@@ -53,7 +53,8 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         userId: user?.id || "temp-user-id",
       };
 
-      await axios.post("/task", payload);
+      const res = await axios.post("/task", payload);
+      addTask(res.data);
       toast.success("Task created successfully!");
       if (onSuccess) onSuccess();
       onClose();

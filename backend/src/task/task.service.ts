@@ -14,7 +14,7 @@ export class TaskService {
         description: createTaskDto.description,
         status: createTaskDto.status,
         priority: createTaskDto.priority,
-        estimatedTime: createTaskDto.estimatedTime,
+        estimatedTime: createTaskDto.estimatedTime * 60, // convert minutes to seconds
         startTime: createTaskDto.startTime,
         endTime: createTaskDto.endTime,
         userId,
